@@ -1,12 +1,14 @@
 package com.dbcmovie.locadora.entity;
 
 
+import com.dbcmovie.locadora.dto.UsuarioDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,11 +16,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Document(collection = "locadora")
 public class LocadoraEntity {
-    @Id
-    private String idLocadora;
-    private String nomePessoa;
+    private UsuarioDto usuario;
+    private LocalDateTime data;
+    private Integer diaAlugado;
     private Double preco;
-    private Integer diasLocacao;
     private String nomeItem;
-    private boolean disponibilidade;
 }
