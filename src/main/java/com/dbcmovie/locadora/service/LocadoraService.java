@@ -12,6 +12,8 @@ import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -34,5 +36,11 @@ public class LocadoraService {
 
         locadoraRepository.save(locacaoEntity);
         log.info("Locação salva com sucesso");
+    }
+
+    public List<LocadoraDto> list() {
+        return locadoraRepository.findAll().stream()
+                .map(locadoraEntity -> objectMapper.convertValue(locadoraEntity, LocadoraDto.class))
+                .toList();
     }
 }
