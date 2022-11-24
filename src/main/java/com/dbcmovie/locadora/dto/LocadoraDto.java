@@ -12,9 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class LocadoraDto {
-    private UsuarioDto usuario;
+    private UsuarioLocacaoDto usuario;
     private LocalDateTime data;
-    private Integer diaAlugado;
-    private Double preco;
-    private String nomeItem;
+    private String nomeFilme;
+    private Double valorTotal;
 }

@@ -3,9 +3,8 @@ package com.dbcmovie.locadora.dto;
 import lombok.Data;
 
 @Data
-public class UsuarioDto {
+public class UsuarioLocacaoDto {
     private String nome;
     private Integer idade;
     private String email;
-    private Integer idUsuario;
 }

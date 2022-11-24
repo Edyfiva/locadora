@@ -1,7 +1,7 @@
 package com.dbcmovie.locadora.entity;
 
 
-import com.dbcmovie.locadora.dto.UsuarioDto;
+import com.dbcmovie.locadora.dto.UsuarioLocacaoDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +16,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Document(collection = "locadora")
 public class LocadoraEntity {
-    private UsuarioDto usuario;
+    private UsuarioLocacaoDto usuario;
     private LocalDateTime data;
-    private Integer diaAlugado;
-    private Double preco;
-    private String nomeItem;
+    private String nomeFilme;
+    private Double valorTotal;
 }
