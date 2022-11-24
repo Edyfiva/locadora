@@ -1,17 +1,15 @@
 package com.dbcmovie.locadora.dto;
 
-import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Document(collection = "locadora")
 public class LocadoraDto {
-
-
     private String idLocadora;
     private String nomePessoa;
     private Double preco;
