@@ -30,7 +30,13 @@ public class LocadoraService {
     )
     public void consumirEventoLocacao(@Payload String mensagem) throws JsonProcessingException {
         LocadoraDto locacaoDto = objectMapper.readValue(mensagem, LocadoraDto.class);
-        log.info("Locação: Id: {}, Nome: {}, Preço: {}, Item: {}, Disponibilidade: {}", locacaoDto.getIdLocadora(), locacaoDto.getNomePessoa(), locacaoDto.getPreco(), locacaoDto.getNomeItem(), locacaoDto.isDisponibilidade());
+        log.info("Locação: Nome do Usário: {}, Email do Usuário: {}, Idade: {}, Nome do filme: {}, Data: {}, Dias alugados: {}",
+                locacaoDto.getUsuario().getNome(),
+                locacaoDto.getUsuario().getEmail(),
+                locacaoDto.getUsuario().getIdade(),
+                locacaoDto.getNomeItem(),
+                locacaoDto.getData(),
+                locacaoDto.getDiaAlugado());
         LocadoraEntity locacaoEntity = objectMapper.convertValue(locacaoDto, LocadoraEntity.class);
 
 
