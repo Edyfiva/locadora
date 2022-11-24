@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,10 +23,11 @@ public class LocadoraService {
 
     private final LocadoraRepository locadoraRepository;
 
-//    private final EmailService emailService;
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
-//    private static final Logger logSchedule = LoggerFactory.getLogger((ScheduledTask.class));
+
+    private LocadoraCreateDto locacaoCreateDto;
 
     @KafkaListener(
             clientIdPrefix = "${spring.kafka.consumer.client-id}",
@@ -33,7 +35,7 @@ public class LocadoraService {
             topicPartitions = {@TopicPartition(topic = "${kafka.topic}", partitions = {"${kafka.partition}"})}
     )
     public void consumirEventoLocacao(@Payload String mensagem) throws JsonProcessingException {
-        LocadoraCreateDto locacaoCreateDto = objectMapper.readValue(mensagem, LocadoraCreateDto.class);
+        locacaoCreateDto = objectMapper.readValue(mensagem, LocadoraCreateDto.class);
         log.info("Nova locação recebida\n ### Dados Locação ###\n" +
                         "Nome do Usário: {}\n" +
                         "Email do Usuário: {}\n" +
@@ -61,8 +63,8 @@ public class LocadoraService {
                 .toList();
     }
 
-//    @Scheduled(cron = "0 0 * * * *")
-//    public void reportarEmailLocacao(UsuarioDto usuarioDto, LocadoraDto locadoraDto) {
-//        emailService.sendEmailUsuario(usuarioDto, locadoraDto);
-//    }
+    @Scheduled(cron = "*/10 * * * * *")
+    public void reportarEmailLocacao() {
+        emailService.sendEmailUsuario(objectMapper.convertValue(locacaoCreateDto, LocadoraDto.class));
+    }
 }
