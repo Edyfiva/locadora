@@ -7,11 +7,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -22,6 +27,8 @@ public class LocadoraService {
     private final LocadoraRepository locadoraRepository;
 
     private final ObjectMapper objectMapper;
+
+    private static final Logger logSchedule = LoggerFactory.getLogger((ScheduledTask.class));
 
     @KafkaListener(
             clientIdPrefix = "${spring.kafka.consumer.client-id}",
@@ -43,4 +50,8 @@ public class LocadoraService {
                 .map(locadoraEntity -> objectMapper.convertValue(locadoraEntity, LocadoraDto.class))
                 .toList();
     }
+
+    @Scheduled(cron = "0 0 * * * *")
+    public void reportarEmailLocacao(){
+
 }
