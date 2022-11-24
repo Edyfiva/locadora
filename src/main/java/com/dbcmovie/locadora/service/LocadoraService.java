@@ -1,6 +1,7 @@
 package com.dbcmovie.locadora.service;
 
 import com.dbcmovie.locadora.dto.LocadoraDto;
+import com.dbcmovie.locadora.dto.UsuarioDto;
 import com.dbcmovie.locadora.entity.LocadoraEntity;
 import com.dbcmovie.locadora.repository.LocadoraRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,6 +27,7 @@ public class LocadoraService {
 
     private final LocadoraRepository locadoraRepository;
 
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
     private static final Logger logSchedule = LoggerFactory.getLogger((ScheduledTask.class));
@@ -57,7 +59,8 @@ public class LocadoraService {
                 .toList();
     }
 
-    @Scheduled(cron = "0 0 * * * *")
-    public void reportarEmailLocacao(){
-
+//    @Scheduled(cron = "0 0 * * * *")
+//    public void reportarEmailLocacao(UsuarioDto usuarioDto, LocadoraDto locadoraDto) {
+//        emailService.sendEmailUsuario(usuarioDto, locadoraDto);
+//    }
 }

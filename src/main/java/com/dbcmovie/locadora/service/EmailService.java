@@ -1,6 +1,10 @@
 package com.dbcmovie.locadora.service;
 
+import com.dbcmovie.locadora.dto.LocadoraDto;
+import com.dbcmovie.locadora.dto.UsuarioDto;
 import com.dbcmovie.locadora.exception.RegraDeNegocioException;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,7 +30,7 @@ public class EmailService {
     private final JavaMailSender emailSender;
 
 
-    public void sendEmailUsuario(UsuarioDto usuarioDto, TipoTemplate tipoTemplate) {
+    public void sendEmailUsuario(UsuarioDto usuarioDto, LocadoraDto locadoraDto) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
@@ -35,38 +39,31 @@ public class EmailService {
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(usuarioDto.getEmail());
             mimeMessageHelper.setSubject("subject");
-            mimeMessageHelper.setText(geContentFromTemplateUsuario(usuarioDto, tipoTemplate), true);
+            mimeMessageHelper.setText(geContentFromTemplateUsuario(usuarioDto, locadoraDto), true);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
-        } catch (MessagingException | IOException | TemplateException | RegraDeNegocioException e) {
+        } catch (MessagingException | IOException  | RegraDeNegocioException e) {
             e.printStackTrace();
+        } catch (TemplateException e) {
+            throw new RuntimeException(e);
         }
     }
 
 
-    public String geContentFromTemplateUsuario(UsuarioDto usuarioDto, TipoTemplate tipoTemplate) throws IOException, TemplateException, RegraDeNegocioException {
+    public String geContentFromTemplateUsuario(UsuarioDto usuarioDto, LocadoraDto locadoraDto) throws IOException, TemplateException, RegraDeNegocioException {
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", usuarioDto.getNome());
         dados.put("id", usuarioDto.getIdUsuario());
         dados.put("idade", usuarioDto.getIdade());
         dados.put("emailUsuario", usuarioDto.getEmail());
         dados.put("email", from);
+        dados.put("nome do item", locadoraDto.getNomeItem());
+        dados.put("valor total da locação", locadoraDto.getPreco());
+        dados.put("total de dias alugados", locadoraDto.getDiaAlugado());
         Template template = null;
 
-        switch (tipoTemplate) {
-            case CREATE -> {
-                template = fmConfiguration.getTemplate("emailcreate-template.html");
-            }
-            case UPDATE -> {
-                template = fmConfiguration.getTemplate("emailupdate-template.html");
-            }
-            case DELETE -> {
-                template = fmConfiguration.getTemplate("emaildelete-template.html");
-            }
-            default -> {
-                throw new RegraDeNegocioException("Tipo de template não encontrado!");
-            }
-        }
+        template = fmConfiguration.getTemplate("emailcreate-template.html");
+
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
     }
 
