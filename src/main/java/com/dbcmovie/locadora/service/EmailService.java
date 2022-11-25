@@ -38,7 +38,7 @@ public class EmailService {
 
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(locadoraDto.getUsuario().getEmail());
-            mimeMessageHelper.setSubject("subject");
+            mimeMessageHelper.setSubject("Relatório diário de locações");
             mimeMessageHelper.setText(geContentFromTemplateUsuario(locadoraDto), true);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
@@ -53,7 +53,7 @@ public class EmailService {
     public String geContentFromTemplateUsuario(LocadoraDto locadoraDto) throws IOException, TemplateException, RegraDeNegocioException {
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", locadoraDto.getUsuario().getNome());
-        dados.put("filme", locadoraDto.getNomeFilme());
+        dados.put("filme", locadoraDto.getFilme().getNome());
         // dados.put("valor", locadoraDto.getValorTotal());
         dados.put("data", locadoraDto.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         dados.put("email", from);

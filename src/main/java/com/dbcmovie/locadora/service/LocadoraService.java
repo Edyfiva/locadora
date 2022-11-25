@@ -46,10 +46,10 @@ public class LocadoraService {
                 locacaoCreateDto.getUsuario().getNome(),
                 locacaoCreateDto.getUsuario().getEmail(),
                 locacaoCreateDto.getUsuario().getIdade(),
-                locacaoCreateDto.getNomeFilme(),
+                locacaoCreateDto.getFilme().getNome(),
                 locacaoCreateDto.getData(),
                 locacaoCreateDto.getQtdDiasLocacao());
-        Double valorTotalLocacao = locacaoCreateDto.getQtdDiasLocacao() * locacaoCreateDto.getPrecoFilme();
+        Double valorTotalLocacao = locacaoCreateDto.getQtdDiasLocacao() * locacaoCreateDto.getFilme().getPreco();
         LocadoraEntity locacaoEntity = objectMapper.convertValue(locacaoCreateDto, LocadoraEntity.class);
         locacaoEntity.setValorTotal(valorTotalLocacao);
 
