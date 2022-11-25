@@ -54,7 +54,7 @@ public class EmailService {
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", locadoraDto.getUsuario().getNome());
         dados.put("filme", locadoraDto.getFilme().getNome());
-        // dados.put("valor", locadoraDto.getValorTotal());
+        dados.put("valor", locadoraDto.getValorTotal());
         dados.put("data", locadoraDto.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         dados.put("email", from);
         Template template = null;
