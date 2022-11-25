@@ -63,7 +63,7 @@ public class LocadoraService {
                 .toList();
     }
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void reportarEmailLocacao() {
         List<LocadoraEntity> emailGeral = locadoraRepository.findAll();
         emailGeral.stream().forEach(locadora -> emailService.sendEmailUsuario(objectMapper.convertValue(locadora, LocadoraDto.class)));
