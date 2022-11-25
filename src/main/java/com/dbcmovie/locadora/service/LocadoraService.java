@@ -63,9 +63,14 @@ public class LocadoraService {
                 .toList();
     }
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 8 * * *")
     public void reportarEmailLocacao() {
-        List<LocadoraEntity> emailGeral = locadoraRepository.findAll();
-        emailGeral.stream().forEach(locadora -> emailService.sendEmailUsuario(objectMapper.convertValue(locadora, LocadoraDto.class)));
+        List<LocadoraEntity> locadoraEntities = locadoraRepository.buscarLocacaoMaiorQueZero();
+        locadoraEntities.stream().forEach(locadora -> {
+            emailService.sendEmailUsuario(objectMapper.convertValue(locadora, LocadoraDto.class));
+            locadoraRepository.delete(locadora);
+            locadora.setQtdDiasLocacao(locadora.getQtdDiasLocacao()-1);
+            locadoraRepository.save(locadora);
+        });
     }
 }

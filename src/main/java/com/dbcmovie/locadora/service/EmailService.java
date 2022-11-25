@@ -38,7 +38,7 @@ public class EmailService {
 
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(locadoraDto.getUsuario().getEmail());
-            mimeMessageHelper.setSubject("Relatório diário de locações");
+            mimeMessageHelper.setSubject("Informações sobre os dias faltantes de locação");
             mimeMessageHelper.setText(geContentFromTemplateUsuario(locadoraDto), true);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
@@ -55,11 +55,16 @@ public class EmailService {
         dados.put("nome", locadoraDto.getUsuario().getNome());
         dados.put("filme", locadoraDto.getFilme().getNome());
         dados.put("valor", locadoraDto.getValorTotal());
+        dados.put("dias", locadoraDto.getQtdDiasLocacao());
         dados.put("data", locadoraDto.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         dados.put("email", from);
         Template template = null;
 
-        template = fmConfiguration.getTemplate("emailcreate-template.html");
+        if(locadoraDto.getQtdDiasLocacao() == 0) {
+            template = fmConfiguration.getTemplate("email-marketing-template.html");
+        }else if((locadoraDto.getQtdDiasLocacao() > 0)){
+            template = fmConfiguration.getTemplate("dias-faltantes email-template.html");
+        }
 
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
     }
